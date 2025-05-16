@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine Proposal</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      height: 100vh;
+      background-color: #ffe6e6;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #container {
+      text-align: center;
+      position: relative;
+    }
+    #question {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #8b0000;
+      margin-bottom: 20px;
+    }
+    .btn {
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: inline-block;
+    }
+    #yesBtn {
+      background-color: #28a745;
+      color: white;
+    }
+    #noBtn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    /* Fullscreen yes style */
+    #yesBtn.fullscreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      font-size: 10vw;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(40, 167, 69, 0.9);
+      border-radius: 0;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+      z-index: 9998;
+    }
+    #overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #yesResponse {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('us.jpg') no-repeat center center/cover;
+      z-index: 10000;
+      color: white;
+      text-shadow: 1px 1px 5px black;
+      font-size: 3rem;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #yesResponse .darken {
+      position: absolute;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
+    #yesResponse p {
+      z-index: 1;
+      margin: 0 20px;
+      text-align: center;
+    }
+
+    #buttonsContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="overlay"></div>
+
+  <div id="container">
+    <div id="question">Will you go out with me nono?</div>
+    <div id="buttonsContainer">
+      <button id="yesBtn" class="btn">Yes</button>
+      <button id="noBtn" class="btn">No</button>
+    </div>
+  </div>
+
+  <div id="yesResponse">
+    <div class="darken"></div>
+    <p>You just made my day, pookie 😚<br>Let's plan something cute soon 💌</p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const overlay = document.getElementById('overlay');
+    const yesResponse = document.getElementById('yesResponse');
+
+    const noMessages = [
+      "are you sure?",
+      "really sure?",
+      "still no?",
+      "are u positive",
+      "think again",
+      "come on",
+      "say yes already",
+      "pookie please...",
+      "just think about it",
+      "If you say no, I will be really sad",
+      "I will be very sad",
+      "I will be very, very, very sad"
+    ];
+
+    let noClickCount = 0;
+
+    noBtn.addEventListener('click', () => {
+      if (noClickCount < noMessages.length) {
+        noBtn.textContent = noMessages[noClickCount];
+
+        // Increase Yes button size
+        let scale = 1 + noClickCount * 0.2;
+        yesBtn.style.transform = `scale(${scale})`;
+
+        noClickCount++;
+
+        if (noClickCount === noMessages.length) {
+          overlay.classList.add('visible');
+          yesBtn.classList.add('fullscreen');
+          noBtn.style.opacity = '0';
+          noBtn.style.pointerEvents = 'none';
+        }
+      }
+    });
+
+    yesBtn.addEventListener('click', () => {
+      overlay.classList.remove('visible');
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+      document.getElementById('question').style.display = 'none';
+      yesResponse.style.display = 'flex';
+    });
+  </script>
+
+</body>
+</html>
